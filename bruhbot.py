@@ -1,6 +1,7 @@
 import os, discord
 from dotenv import load_dotenv
 from discord.ext import commands
+import json
 
 import creeper, riddle
 
@@ -8,16 +9,20 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 SERVER = os.getenv('SERVER_TOKEN')
 
+with open("settings.json") as f:
+    SETTINGS = json.load(f)
+
 bot = commands.Bot(command_prefix = '}')
 
-modchannels = ["mods", "announcements"]
-EXPLAIN = "This Discord is a public record of conversations that the staff have access to.  To prevent people from accidentally talking about the questions early and potentially breaking the honor code, we have limited this server to only 'bruh' and similar messages.  Thanks for understanding!"
+modchannels = SETTINGS["adminchannels"]
+bruchannels = SETTINGS["bruhchannels"]
+ENABLE = SETTINGS["enable"]
+
+EXPLAIN = "This Discord is a public record of conversations that the staff have access to. To prevent people from accidentally talking about the questions early and potentially breaking the honor code, we have limited this server to only 'bruh' and similar messages.  Thanks for understanding!
 
 bot.wcount = -1
 bot.wusers = []
 bot.wlives = 1
-
-print(creeper.words)
 
 def safemessage(msg: str):
 
@@ -34,7 +39,7 @@ async def on_ready():
 @bot.event
 async def on_message_edit(before, after):
 
-    if before.content != after.content:
+    if ENABLE["delete-edits"] and before.content != after.content:
         print(f"Deleting '{after.content}' ({after.author})")
         await after.delete()
     
@@ -43,14 +48,11 @@ async def on_message(message):
 
     if message.author == bot.user:
         return
-    
-    # print(str(message.channel))
-    # print(str(message.content))
 
-    if str(message.channel) in modchannels:
+    if ENABLE["admin-channels"] str(message.channel) in modchannels:
         pass
 
-    elif str(message.channel) == "bruh":
+    elif str(message.channel) in bruchannels:
 
         small = creeper.makeNormal(message.content)
 
@@ -80,9 +82,6 @@ async def on_message(message):
             if x := riddle.checkSolution(message.content, str(message.author)):
                 print(x)
                 await message.channel.send(x)
-                print(f"Deleting '{message.content}' ({message.author})")
-                await message.delete()
-                return
             elif bot.wcount > -1:
                 bot.wlives -= 1
                 if bot.wlives < 1:
@@ -95,11 +94,11 @@ async def on_message(message):
             print(f"Deleting '{message.content}' ({message.author})")
             await message.delete()
     
-    elif str(message.channel) == "music-commands":
+    # elif str(message.channel) == "music-commands":
 
-        if message.content[0] != "-":
-            print(f"Deleting '{message.content}' ({message.author}) in #{message.channel}")
-            await message.delete()
+    #     if message.content[0] != "-":
+    #         print(f"Deleting '{message.content}' ({message.author}) in #{message.channel}")
+    #         await message.delete()
     
     else:
         print(f"Deleting '{message.content}' ({message.author}) in #{message.channel}")

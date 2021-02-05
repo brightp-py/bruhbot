@@ -1,0 +1,13 @@
+{
+    "adminchannels": [
+        "mods",
+        "announcements"
+    ],
+    "bruhchannels": [
+        "bruh"
+    ],
+    "enable": {
+        "delete-edits": true,           // when enabled, deletes any message that has been edited to have different content.  otherwise, edits will go unchecked.
+        "admin-channels": true          // when enabled, ignores any message sent in one of the channels listed in "adminchannels"
+    }
+}
