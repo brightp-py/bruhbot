@@ -1,0 +1,27 @@
+I can't write ______.  I can never remember what the structure is.
+Format: ------
+Answer: haikus
+
+1
+11
+21
+1211
+111221
+312211
+Format: --------
+Answer: 13112221
+
+A number `n` such that all of its factors (excluding itself) add up to equal `n`.
+6 = 1 + 2 + 3
+28 = 1 + 2 + 4 + 7 + 14
+The next smallest number is...
+Format: ---
+Answer: 496
+
+hawwam (runs)
+hawwi (ran)
+nawgam (talks)
+ne nawgam (has talked)
+_________ (had talked)
+Format: -- -----
+Answer: ne nawgi
